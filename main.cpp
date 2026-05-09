@@ -122,5 +122,6 @@ int main()
     q.display();
     cout << "\n=== Total Pages ===" << endl;
     q.totalPages();
+    
     return 0;
 }
