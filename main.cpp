@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
-class Job 
+
+class Job
 {
 public:
     int jobId;
@@ -13,88 +14,95 @@ public:
         next = nullptr;
     }
 };
-class Queue 
+
+class Queue
 {
 private:
     Job* front;
     Job* rear;
 public:
-    Queue() 
+    Queue();
+    void enqueue(int jobId, int pages);
+    void dequeue();
+    void peek();
+    void display();
+    void totalPages();
+};
+Queue::Queue()
+{
+    front = nullptr;
+    rear = nullptr;
+}
+void Queue::enqueue(int jobId, int pages)
+{
+    Job* newJob = new Job(jobId, pages);
+    if (rear == nullptr)
     {
-        front = nullptr;
+        front = newJob;
+        rear = newJob;
+    }
+    else
+    {
+        rear->next = newJob;
+        rear = newJob;
+    }
+    cout << "Job " << jobId << " added to queue." << endl;
+}
+void Queue::dequeue()
+{
+    if (front == nullptr)
+    {
+        cout << "No jobs to print." << endl;
+        return;
+    }
+    Job* temp = front;
+    cout << "Printing Job -> ID: " << temp->jobId
+        << " | Pages: " << temp->pages << endl;
+    front = front->next;
+    if (front == nullptr)
+    {
         rear = nullptr;
     }
-    void enqueue(int jobId, int pages)
+    delete temp;
+}
+void Queue::peek()
+{
+    if (front == nullptr)
     {
-        Job* newJob = new Job(jobId, pages);
-        if (rear == nullptr)
-        {
-            front = newJob;
-            rear = newJob;
-        }
-        else 
-        {
-            rear->next = newJob;
-            rear = newJob;
-        }
-        cout << "Job " << jobId << " added to queue." << endl;
+        cout << "Queue is empty." << endl;
+        return;
     }
-    void dequeue()
+    cout << "Next Job -> ID: " << front->jobId
+        << " | Pages: " << front->pages << endl;
+}
+void Queue::display()
+{
+    if (front == nullptr)
     {
-        if (front == nullptr) 
-        {
-            cout << "No jobs to print." << endl;
-            return;
-        }
-        Job* temp = front;
-        cout << "Printing Job -> ID: " << temp->jobId
+        cout << "Queue is empty." << endl;
+        return;
+    }
+    cout << "Pending Print Jobs:" << endl;
+    Job* temp = front;
+    while (temp != nullptr)
+    {
+        cout << "  Job ID: " << temp->jobId
             << " | Pages: " << temp->pages << endl;
-        front = front->next;
-        if (front == nullptr)
-        {
-            rear = nullptr;
-        }
-        delete temp;
+        temp = temp->next;
     }
-    void peek()
+}
+void Queue::totalPages()
+{
+    int total = 0;
+    Job* temp = front;
+    while (temp != nullptr)
     {
-        if (front == nullptr)
-        {
-            cout << "Queue is empty." << endl;
-            return;
-        }
-        cout << "Next Job -> ID: " << front->jobId
-            << " | Pages: " << front->pages << endl;
+        total += temp->pages;
+        temp = temp->next;
     }
-    void display()
-    {
-        if (front == nullptr)
-        {
-            cout << "Queue is empty." << endl;
-            return;
-        }
-        cout << "Pending Print Jobs:" << endl;
-        Job* temp = front;
-        while (temp != nullptr) 
-        {
-            cout << "  Job ID: " << temp->jobId
-                << " | Pages: " << temp->pages << endl;
-            temp = temp->next;
-        }
-    }
-    void totalPages() 
-    {
-        int total = 0;
-        Job* temp = front;
-        while (temp != nullptr) 
-        {
-            total += temp->pages;
-            temp = temp->next;
-        }
-        cout << "Total Pending Pages: " << total << endl;
-    }
-};
-int main() 
+    cout << "Total Pending Pages: " << total << endl;
+}
+int main()
 {
     Queue q;
     cout << "=== Adding Jobs ===" << endl;
